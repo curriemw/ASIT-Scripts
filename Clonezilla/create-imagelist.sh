@@ -1,0 +1,1 @@
+cd /home/partimag && ls -1 | grep -v ImageList.csv | sed 's/-/,/g' > ImageList.csv && smbclient //10.71.4.39/Ghost\ Images -m SMB2 -c "put ImageList.csv"
