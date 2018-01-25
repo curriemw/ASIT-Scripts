@@ -1,5 +1,3 @@
-#!/bin/sh
-
 strComputerName="$1"
 
 DEFAULT_OU="ou=Computers,ou=Artsci,ou=Colleges,dc=ad,dc=uc,dc=edu"
