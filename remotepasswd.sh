@@ -25,3 +25,5 @@ ssh "administrator@$PC"
 echo "Which user would you like to change the password for?"
 user_select
 sudo passwd $USER_SELECTED
+
+echo "Password changed. \n Your Password Keychain will no longer work."
