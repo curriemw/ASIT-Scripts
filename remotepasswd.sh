@@ -21,7 +21,7 @@ function user_select {
     fi
 }
 read -p "Enter the computer you wish to configure: " $PC
-ssh administrator@$PC
+ssh "administrator@$PC"
 echo "Which user would you like to change the password for?"
 user_select
 sudo passwd $USER_SELECTED
