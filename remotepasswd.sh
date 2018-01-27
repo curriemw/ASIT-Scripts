@@ -26,4 +26,6 @@ echo "Which user would you like to change the password for?"
 user_select
 sudo passwd $USER_SELECTED
 
-echo "Password changed. \n Your Password Keychain will no longer work."
+rm "/Users/$USER_SELECTED/Library/Keychains/login.keychain-db"
+
+echo "Password changed. \n Because this is a forced reset, the keychain for $USER_SELECTED will no longer work and has been removed."
