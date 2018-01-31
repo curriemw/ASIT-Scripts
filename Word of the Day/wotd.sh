@@ -1,5 +1,11 @@
-DATE=($(date "+%Y-%m-%d"))
-WEEKDAY=($(date -v1m | awk '{print $1}'))
+UNAME=$(uname)
+if [[ $UNAME == 'Linux' ]]; then
+    DATE=($(date "+%Y-%m-%d"))
+    WEEKDAY=($(date "+%a"))
+elif [[ $UNAME == 'Darwin' ]]; then
+    DATE=($(date "+%Y-%m-%d"))
+    WEEKDAY=($(date -v1m | awk '{print $1}'))
+fi
 COOKIE=''
 
 # Generates the Word of the Day based on the day of the week
@@ -23,7 +29,7 @@ wotd_gen () {
     esac
 
     WOTD="$(fortune $COOKIE)"
-    echo $DATE,$WOTD >> wotd_history.csv
+    echo "$DATE","\"$WOTD\"" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' >> wotd_history.csv
     
 }
 
@@ -36,9 +42,9 @@ fi
 if !($(grep -q $DATE wotd_history.csv)); then
    wotd_gen
 else
-    WOTD="$(tail -n 1 wotd_history.csv | cut -d "," -f2)"
+    WOTD="$(tail -n 1 wotd_history.csv | cut -d "," -f2- )"
 fi
 
 # Displays the WOTD
-echo $WOTD
+printf "$WOTD"
 
