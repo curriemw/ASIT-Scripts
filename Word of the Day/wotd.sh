@@ -29,7 +29,7 @@ wotd_gen () {
     esac
 
     WOTD="$(fortune $COOKIE)"
-    echo "$DATE","\"$WOTD\"" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' >> wotd_history.csv
+    echo "$DATE",\"$WOTD\" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' >> wotd_history.csv
     
 }
 
