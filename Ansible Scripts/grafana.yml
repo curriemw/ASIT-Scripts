@@ -1,0 +1,43 @@
+---
+
+- name: "Grafana Installation"
+  hosts: grafana-servers
+
+  tasks:
+   - name: Set SElinux to permissive
+     selinux:
+       policy: targeted
+       state: permissive
+
+   - name: Install Grafana Repository
+     yum_repository:
+       name: grafana
+       description: Grafana Repository
+       baseurl: https://packagecloud.io/grafana/stable/el/6/$basearch
+       gpgkey: https://packagecloud.io/gpg.key https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
+       gpgcheck: yes
+       sslverify: yes
+       sslcacert: /etc/pki/tls/certs/ca-bundle.crt
+       enabled: yes
+
+   - name: Install Latest Grafana-Server
+     yum:
+       name: grafana
+       state: latest
+
+   - name: Modify grafana.ini to replace hostname
+     replace:
+       path: /etc/grafana/grafana.ini
+       regexp: 'localhost'
+       replace: {{ ansible_fqdn }}
+       
+   - name: Start Grafana Service
+     systemd:
+       name: grafana-server
+       state: started
+
+   - name: Open Port 3000 for Grafana
+     firewalld:
+       port: 3000/tcp
+       permanent: true
+       state: enabled

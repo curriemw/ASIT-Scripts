@@ -1,0 +1,38 @@
+---
+
+- name: "A&S Image Server Deployment"
+  hosts: imageservers
+
+  tasks:
+    - name: Add EPEL repository
+      yum_repository:
+        name: epel
+        description: EPEL YUM repo
+        baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
+        gpgkey: https://archive.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7
+        gpgcheck: yes
+
+    - name: "Update Yum"
+      yum:
+        name: '*'
+        state: latest
+
+    - name: "Install Samba & NTFS Compatibility"
+      yum:
+        name: git,samba-client,ntfs-3g
+        state: latest
+
+    - name: "Copy Scripts from Github"
+      git:
+        repo: https://github.com/curriemw/ASIT-Scripts.git
+        dest: /tmp/ASIT-Scripts/
+        force: yes
+
+    - name: "Moving from temp folder"
+      shell: "mv /tmp/ASIT-Scripts/Clonezilla/create-imagelist.sh /etc/cron.weekly/; mv /tmp/ASIT-Scripts/Clonezilla/copy-images-to-exthd.sh /etc/cron.daily/"
+
+    - name: "Clearing temp"
+      file:
+        path: /tmp/ASIT-Scripts/
+        state: absent
+
