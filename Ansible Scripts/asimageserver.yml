@@ -19,7 +19,7 @@
 
     - name: "Install Samba & NTFS Compatibility"
       yum:
-        name: git,samba-client,ntfs-3g
+        name: NetworkManager-glib,git,samba-client,ntfs-3g
         state: latest
 
     - name: "Copy Scripts from Github"
@@ -36,3 +36,11 @@
         path: /tmp/ASIT-Scripts/
         state: absent
 
+    - name: "Set IP Address"
+      nmcli:
+        conn_name: eth1
+        ip4: 10.71.4.251/24
+        dns4: "10.25.3.2 10.27.3.2"
+        gw4: "10.71.4.1"
+        type: ethernet
+        state: present
